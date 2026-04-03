@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Bồi Dưỡng KHTN (Vật Lý) - Phiên Bản Trực Quan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <script>
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$']] }, svg: { fontCache: 'global' } };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f1f5f9; scroll-behavior: smooth; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .sidebar-link { transition: all 0.3s ease; }
+        .sidebar-link:hover, .sidebar-link.active { background-color: #eff6ff; color: #1d4ed8; font-weight: 700; border-left-width: 4px; border-color: #2563eb; }
+        
+        .tf-btn.selected-true { background-color: #10b981; color: white; border-color: #059669; }
+        .tf-btn.selected-false { background-color: #ef4444; color: white; border-color: #dc2626; }
+        .mcq-option:hover { background-color: #eff6ff; border-color: #3b82f6; }
+        .mcq-option.selected { background-color: #eff6ff; border-color: #3b82f6; box-shadow: 0 0 0 2px #3b82f6; }
+        
+        .review-correct { background-color: #d1fae5; border-color: #10b981; color: #065f46; font-weight: bold; }
+        .review-wrong { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; text-decoration: line-through; }
+        .solution-box { background-color: #f0fdf4; border-left: 4px solid #22c55e; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <nav class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white shadow-xl sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="text-2xl font-black tracking-tight cursor-pointer flex items-center" onclick="showTab('home')">
+                <i class="fas fa-atom text-cyan-400 mr-2"></i>PHYSICS PRO
+            </div>
+            <div class="hidden md:flex space-x-6 font-bold text-sm uppercase items-center">
+                <button onclick="showTab('home')" class="hover:text-cyan-400 transition">Trang chủ</button>
+                <button onclick="showTab('theory')" class="hover:text-cyan-400 transition">Hệ thống Lý Thuyết</button>
+                <button onclick="showTab('methods')" class="hover:text-cyan-400 transition text-yellow-300">Phương Pháp Giải</button>
+                <button onclick="startExam()" class="bg-cyan-500 hover:bg-cyan-400 text-blue-900 px-6 py-2 rounded-full transition shadow-lg transform hover:-translate-y-1">Thi Thử (10đ)</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8 max-w-7xl min-h-screen">
+        
+        <div id="home" class="tab-content active text-center fade-in">
+            <h1 class="text-4xl md:text-5xl font-black mb-6 mt-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-indigo-600">Hệ Thống Kiến Thức Phần Động Học</h1>
+            <p class="text-gray-600 mb-10 text-lg max-w-3xl mx-auto">Nhóm 1 - 66ASPKHTN</p>
+            
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-12">
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-blue-500 cursor-pointer hover:-translate-y-2 transition" onclick="showTab('theory')">
+                    <i class="fas fa-book-open text-5xl text-blue-500 mb-4"></i>
+                    <h3 class="font-bold text-xl mb-2">Lý Thuyết</h3>
+                    <p class="text-gray-500 text-sm">6 Chương cơ học được trình bày rành mạch, chi tiết công thức.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-green-500 cursor-pointer hover:-translate-y-2 transition" onclick="showTab('methods')">
+                    <i class="fas fa-project-diagram text-5xl text-green-500 mb-4"></i>
+                    <h3 class="font-bold text-xl mb-2">Phương Pháp Giải</h3>
+                    <p class="text-gray-500 text-sm">13 bài toán cốt lõi với các bước giải quyết tuần tự, logic.</p>
+                </div>
+                <div class="bg-white p-8 rounded-2xl shadow-lg border-t-4 border-purple-500 cursor-pointer hover:-translate-y-2 transition" onclick="startExam()">
+                    <i class="fas fa-random text-5xl text-purple-500 mb-4"></i>
+                    <h3 class="font-bold text-xl mb-2">Thi Thử Đảo Đề</h3>
+                    <p class="text-gray-500 text-sm">Mã đề ngẫu nhiên, xáo trộn câu hỏi, tính giờ tự động 45 phút.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="theory" class="tab-content fade-in">
+            <div class="flex flex-col md:flex-row gap-8">
+                
+                <div class="md:w-1/4">
+                    <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-200 sticky top-24">
+                        <h3 class="font-black text-lg text-gray-800 border-b pb-3 mb-3 uppercase tracking-wide">Mục lục lý thuyết</h3>
+                        <ul class="space-y-1 text-gray-600 font-medium">
+                            <li><a href="#sec-1" class="block px-4 py-3 rounded-lg sidebar-link"><i class="fas fa-arrow-right w-6"></i> 1. CĐ Thẳng Đều</a></li>
+                            <li><a href="#sec-2" class="block px-4 py-3 rounded-lg sidebar-link"><i class="fas fa-forward w-6"></i> 2. CĐ Biến Đổi Đều</a></li>
+                            <li><a href="#sec-3" class="block px-4 py-3 rounded-lg sidebar-link"><i class="fas fa-arrow-down w-6"></i> 3. Sự Rơi Tự Do</a></li>
+                            <li><a href="#sec-4" class="block px-4 py-3 rounded-lg sidebar-link"><i class="fas fa-circle-notch w-6"></i> 4. CĐ Tròn Đều</a></li>
+                            <li><a href="#sec-5" class="block px-4 py-3 rounded-lg sidebar-link"><i class="fas fa-sync w-6"></i> 5. Tròn Biến Đổi Đều</a></li>
+                            <li><a href="#sec-6" class="block px-4 py-3 rounded-lg sidebar-link"><i class="fas fa-project-diagram w-6"></i> 6. PP Tọa Độ</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="md:w-3/4 space-y-16">
+                    
+                    <section id="sec-1" class="scroll-mt-24">
+                        <h2 class="text-3xl font-black text-blue-800 mb-6 border-b-2 border-blue-100 pb-2">§1. CHUYỂN ĐỘNG THẲNG ĐỀU</h2>
+                        <div class="flex flex-col gap-8">
+                            <div class="bg-white p-4 rounded-3xl shadow-lg border border-gray-100 relative overflow-hidden">
+                                <img src="https://placehold.co/800x300/1e40af/ffffff?text=Cac+Phuong+Trinh+Dong+Hoc" alt="Minh hoạ Động học" class="w-full object-cover h-[250px] object-center rounded-2xl">
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-blue-600">I. Các phương trình của chuyển động thẳng đều </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li><strong>Tọa độ:</strong> $x = v(t - t_0) + x_0$ </li>
+                                    <li><strong>Đường đi:</strong> $s = v(t - t_0)$ </li>
+                                    <li><strong>Vận tốc:</strong> $v = \text{const}$ </li>
+                                </ul>
+                                <div class="bg-blue-50 p-3 mt-4 rounded-lg text-sm">
+                                    <strong>Ghi chú:</strong> Nếu chọn $t_0 = 0$ và $x_0 = 0$ ta có $x = s = vt$. $v > 0$ nếu chọn chiều dương là chiều chuyển động, $v < 0$ nếu ngược chiều chuyển động.
+                                </div>
+                            </div>
+                              <img src="https://i.ibb.co/twwtBr4G/Picture2.jpg" alt="">
+
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-blue-600">II. Đồ thị của chuyển động </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li><strong>Đồ thị tọa độ theo thời gian:</strong> Là nửa đường thẳng có độ dốc (hệ số góc) là $v$. Giới hạn bởi điểm $(x_0, t_0)$ .</li>
+                                    <li><strong>Đồ thị vận tốc theo thời gian:</strong> Là nửa đường thẳng song song với trục thời gian, giới hạn bởi điểm $t_0$. Đường đi $s$ được biểu diễn bởi diện tích $S$ .</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-blue-600">III. Công thức cộng vận tốc </h4>
+                                <p class="text-sm text-gray-700 font-bold mb-2">Tổng quát: $\vec{v}_{13} = \vec{v}_{12} + \vec{v}_{23}$ </p>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li>Cùng phương, cùng chiều: $v_{13} = v_{12} + v_{23}$ </li>
+                                    <li>Cùng phương, ngược chiều: $v_{13} = v_{12} - v_{23}$ (với $v_{12} > v_{23}$) </li>
+                                    <li>Vuông góc với nhau: $v_{13} = \sqrt{v_{12}^2 + v_{23}^2}$ </li>
+                                </ul>
+                            </div>
+                        </div>
+                      
+                    </section>
+
+                    <section id="sec-2" class="scroll-mt-24">
+                        <h2 class="text-3xl font-black text-purple-800 mb-6 border-b-2 border-purple-100 pb-2">§2. CHUYỂN ĐỘNG THẲNG BIẾN ĐỔI ĐỀU</h2>
+                        <div class="flex flex-col gap-6">
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-purple-600">I. Vận tốc và Gia tốc </h4>
+                                <ul class="text-sm space-y-3 text-gray-700 list-disc ml-4">
+                                    <li><strong>Vận tốc trung bình:</strong> $\bar{v} = \frac{s}{t} = \frac{\sum \bar{v}_i t_i}{\sum t_i}$ </li>
+                                    <li><strong>Vận tốc tức thời:</strong> $v = \frac{\Delta s}{\Delta t}$ </li>
+                                    <li><strong>Gia tốc:</strong> $\vec{a} = \frac{\vec{v}_2 - \vec{v}_1}{t_2 - t_1} = \frac{\Delta \vec{v}}{\Delta t}$ </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-purple-600">II. Các phương trình cơ bản </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li><strong>Gia tốc:</strong> $a = \text{const}$ </li>
+                                    <li><strong>Vận tốc tức thời:</strong> $v = a(t - t_0) + v_0$ </li>
+                                    <li><strong>Toạ độ:</strong> $x = \frac{1}{2}a(t - t_0)^2 + v_0(t - t_0) + x_0$ </li>
+                                    <li><strong>Đường đi:</strong> $s = x - x_0 = \frac{1}{2}a(t - t_0)^2 + v_0(t - t_0)$ </li>
+                                    <li><strong>Hệ thức độc lập thời gian:</strong> $v^2 - v_0^2 = 2as$ </li>
+                                </ul>
+                                <p class="text-sm text-gray-700 mt-3 font-bold">Tính chất: </p>
+                                <ul class="text-sm space-y-1 text-gray-700 list-disc ml-4">
+                                    <li>Nhanh dần đều: $av > 0$ ($a, v$ cùng chiều) </li>
+                                    <li>Chậm dần đều: $av < 0$ ($a, v$ ngược chiều) </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-purple-600">III. Đồ thị của chuyển động </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li><strong>Gia tốc - thời gian:</strong> Đường thẳng song song trục thời gian. Diện tích $S$ biểu diễn vận tốc .</li>
+                                    <li><strong>Vận tốc - thời gian:</strong> Nửa đường thẳng có độ dốc là $a$. Giới hạn bởi $(t_0, v_0)$. Diện tích $S$ biểu diễn đường đi .</li>
+                                    <li><strong>Tọa độ - thời gian:</strong> Đồ thị là parabol .</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-purple-600">IV. Đổi hệ quy chiếu </h4>
+                                <p class="text-sm text-gray-700">Công thức cộng gia tốc: $\vec{a}_{13} = \vec{a}_{12} + \vec{a}_{23}$ </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="sec-3" class="scroll-mt-24">
+                        <h2 class="text-3xl font-black text-cyan-800 mb-6 border-b-2 border-cyan-100 pb-2">§3. SỰ RƠI TỰ DO</h2>
+                        <div class="flex flex-col gap-6">
+                            <div class="bg-white p-4 rounded-3xl shadow-lg border border-gray-100 relative overflow-hidden">
+                                <img src="https://placehold.co/800x250/155e75/ffffff?text=Su+Roi+Tu+Do" alt="Minh hoạ Rơi tự do" class="w-full object-cover h-[200px] object-center rounded-2xl">
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-cyan-600">I. Tính chất </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li>Rơi tự do (không vận tốc đầu) là chuyển động nhanh dần đều.</li>
+                                    <li>Gia tốc trọng lực $\vec{a} = \vec{g}$: Phương thẳng đứng, chiều hướng xuống, $g \approx 9.81 \text{ m/s}^2$.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-cyan-600">II. Các phương trình </h4>
+                                <div class="grid md:grid-cols-2 gap-4 mt-2">
+                                    <div class="bg-gray-50 p-4 rounded-xl border">
+                                        <p class="font-bold mb-2">Về độ cao (gốc ở mặt đất, chiều dương hướng lên):</p>
+                                        <ul class="text-sm space-y-1 list-none">
+                                            <li>$y = -\frac{1}{2}gt^2 + y_0$</li>
+                                            <li>$v = -gt$</li>
+                                            <li>$v^2 = -2g(y - y_0)$</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-xl border">
+                                        <p class="font-bold mb-2">Về quãng đường rơi (chiều dương hướng xuống):</p>
+                                        <ul class="text-sm space-y-1 list-none">
+                                            <li>$s = \frac{1}{2}gt^2$</li>
+                                            <li>$v = gt$</li>
+                                            <li>$v^2 = 2gs$</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="sec-4" class="scroll-mt-24">
+                        <h2 class="text-3xl font-black text-orange-800 mb-6 border-b-2 border-orange-100 pb-2">§4. CHUYỂN ĐỘNG TRÒN ĐỀU</h2>
+                        <div class="flex flex-col gap-6">
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-orange-600">I. Tọa độ, Vận tốc, Chu kì, Tần số </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li><strong>Tọa độ cong và góc:</strong> $s = R\varphi$ </li>
+                                    <li><strong>Vận tốc dài:</strong> $v = \text{const}$ </li>
+                                    <li><strong>Vận tốc góc:</strong> $\omega = \frac{\varphi}{t}$ </li>
+                                    <li><strong>Hệ thức liên lạc:</strong> $v = R\omega$ </li>
+                                    <li><strong>Chu kì:</strong> $T = \frac{2\pi}{\omega} = \frac{1}{n}$ (n: số vòng quay/s) </li>
+                                    <li><strong>Tần số:</strong> $f = \frac{1}{T} = n$ </li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-orange-600">II. Gia tốc trong chuyển động tròn đều </h4>
+                                <p class="text-sm text-gray-700">Luôn có gia tốc hướng tâm với độ lớn: $a = \frac{v^2}{R} = R\omega^2 = \text{const}$ </p>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="sec-5" class="scroll-mt-24">
+                        <h2 class="text-3xl font-black text-indigo-800 mb-6 border-b-2 border-indigo-100 pb-2">§5. CHUYỂN ĐỘNG TRÒN BIẾN ĐỔI ĐỀU</h2>
+                        <div class="flex flex-col gap-6">
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-indigo-600">I. Gia tốc trong CĐ tròn bất kì </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li><strong>Gia tốc toàn phần:</strong> $\vec{a} = \vec{a}_t + \vec{a}_n$. Vectơ $\vec{a}$ luôn hướng vào bề lõm quỹ đạo .</li>
+                                    <li><strong>Gia tốc góc:</strong> $\alpha = \frac{\Delta\omega}{\Delta t}$. Nếu $\alpha = 0$ (CĐ đều), $\alpha = \text{const}$ (CĐ biến đổi đều).</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-indigo-600">II. Các phương trình CĐ tròn biến đổi đều </h4>
+                                <div class="grid md:grid-cols-2 gap-4 mt-2">
+                                    <div class="bg-indigo-50 p-4 rounded-xl border">
+                                        <p class="font-bold mb-2">Đại lượng chiều dài: </p>
+                                        <ul class="text-sm space-y-1 list-none">
+                                            <li>$a_t = \text{const}$</li>
+                                            <li>$v = a_t t + v_0$</li>
+                                            <li>$s = \frac{1}{2}a_t t^2 + v_0 t + s_0$</li>
+                                            <li>$v^2 - v_0^2 = 2a_t(s - s_0)$</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-indigo-50 p-4 rounded-xl border">
+                                        <p class="font-bold mb-2">Đại lượng góc: </p>
+                                        <ul class="text-sm space-y-1 list-none">
+                                            <li>$\alpha = \text{const}$</li>
+                                            <li>$\omega = \alpha t + \omega_0$</li>
+                                            <li>$\varphi = \frac{1}{2}\alpha t^2 + \omega_0 t + \varphi_0$</li>
+                                            <li>$\omega^2 - \omega_0^2 = 2\alpha(\varphi - \varphi_0)$</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-700 italic mt-3">Ghi chú: $a_t \cdot v_0 > 0$ (hoặc $\alpha \cdot \omega_0 > 0$) là nhanh dần đều. Nhỏ hơn 0 là chậm dần đều .</p>
+                            </div>
+                            
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-indigo-600">III. Áp dụng vật rắn quay quanh một trục </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li>Quỹ đạo các điểm ngoài trục quay là các đường tròn đồng trục.</li>
+                                    <li>Vận tốc góc $\omega$ bằng nhau, vận tốc dài $v$ phụ thuộc bán kính $R$.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section id="sec-6" class="scroll-mt-24">
+                        <h2 class="text-3xl font-black text-rose-800 mb-6 border-b-2 border-rose-100 pb-2">§6. KHẢO SÁT BẰNG PHƯƠNG PHÁP TOẠ ĐỘ</h2>
+                        <div class="flex flex-col gap-6">
+                            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                                <h4 class="font-bold text-lg mb-3 text-rose-600">I. Nguyên tắc </h4>
+                                <ul class="text-sm space-y-2 text-gray-700 list-disc ml-4">
+                                    <li>Hình chiếu của vật M trên các trục tọa độ là chuyển động thẳng .</li>
+                                    <li>Có tính chất chuyển động độc lập với nhau. Biết hình chiếu suy ra chuyển động thực.</li>
+                                </ul>
+                                <p class="text-sm font-bold text-rose-600 mt-4">II. Gia tốc và vận tốc </p>
+                                <p class="text-sm text-gray-700 ml-4 mt-2">$\vec{a}_m = \text{Ch.}(\vec{a}_M)$ và $\vec{v}_m = \text{Ch.}(\vec{v}_M)$.</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div id="methods" class="tab-content fade-in">
+            <h2 class="text-3xl font-black text-gray-800 mb-8 text-center border-b pb-4">13 Bài Toán Phương Pháp Giải</h2>
+            <div class="max-w-5xl mx-auto space-y-8">
+                
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-blue-600 relative overflow-hidden">
+                    <div class="flex items-center gap-4 mb-4">
+                        <h3 class="text-2xl font-black text-blue-900">§1. CHUYỂN ĐỘNG THẲNG ĐỀU </h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-blue-700 mb-2">BÀI TOÁN 1: Tính quãng đường đi </h4>
+                            <p class="text-sm text-gray-700">Chọn chiều dương là chiều chuyển động. Áp dụng phương trình $s = vt$ .</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-blue-700 mb-2">BÀI TOÁN 2: Định thời điểm và vị trí gặp nhau </h4>
+                            <p class="text-sm text-gray-700">Chọn chiều dương, hệ quy chiếu. Lập PT: $x = v(t - t_0) + x_0$. Khi gặp nhau: $x_1 = x_2$. Giải tìm t và tọa độ .</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-blue-700 mb-2">BÀI TOÁN 3: Đồ thị chuyển động </h4>
+                            <p class="text-sm text-gray-700">Vẽ bằng cách xác định điểm (lưu ý giới hạn). Đồ thị hướng lên ($v > 0$), hướng xuống ($v < 0$). Song song (cùng vận tốc). Cắt nhau (gặp nhau tại giao điểm) .</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-blue-700 mb-2">BÀI TOÁN 4: Đổi hệ quy chiếu </h4>
+                            <p class="text-sm text-gray-700">Chọn HQC. Áp dụng công thức cộng $\vec{v}_{13} = \vec{v}_{12} + \vec{v}_{23}$ (cùng phương cộng/trừ, khác phương dùng hình học). Lập PT để giải ẩn .</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-purple-600 relative overflow-hidden">
+                    <div class="flex items-center gap-4 mb-4">
+                        <h3 class="text-2xl font-black text-purple-900">§2. CHUYỂN ĐỘNG THẲNG BIẾN ĐỔI ĐỀU </h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-purple-700 mb-2">BÀI TOÁN 5: Vận tốc trung bình </h4>
+                            <p class="text-sm text-gray-700">Áp dụng công thức tổng quát $\bar{v} = \frac{\sum \bar{v}_i t_i}{\sum t_i}$ .</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-purple-700 mb-2">BÀI TOÁN 6: Tính a, v, t, s </h4>
+                            <p class="text-sm text-gray-700">Dùng $a = \frac{\Delta v}{\Delta t}$, $s = \frac{1}{2}at^2 + v_0 t$, và $v^2 - v_0^2 = 2as$ .</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-purple-700 mb-2">BÀI TOÁN 7: Bài toán gặp nhau </h4>
+                            <p class="text-sm text-gray-700">Chọn HQC, lập PT $x = \frac{1}{2}a(t-t_0)^2 + v_0(t-t_0) + x_0$. Cho $x_1 = x_2$ để tìm thời điểm gặp .</p>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-purple-700 mb-2">BÀI TOÁN 8: Đồ thị biến đổi đều </h4>
+                            <p class="text-sm text-gray-700">a-t (đường ngang), v-t (đường dốc), x-t (parabol). Giao đồ thị v-t với trục hoành là lúc đổi chiều (đứng lại). Tính a và $v_0$ từ đồ thị để lập PT .</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-cyan-500 relative">
+                    <div class="flex items-center gap-4 mb-4">
+                        <h3 class="text-2xl font-black text-cyan-900">§3. SỰ RƠI TỰ DO </h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-cyan-700 mb-2">BÀI TOÁN 9: Tính t, s, v </h4>
+                            <p class="text-sm text-gray-600">Chọn chiều hướng xuống, $a=g$. Áp dụng $s = \frac{1}{2}gt^2$, $v=gt$, $v^2=2gs$ .</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-cyan-700 mb-2">BÀI TOÁN 10: Liên hệ hai vật rơi </h4>
+                            <p class="text-sm text-gray-600">Gốc thời gian lệch thì $s = \frac{1}{2}g(t-t_0)^2$. Hai vật rơi tự do luôn CĐ thẳng đều đối với nhau do $\vec{a}_{21} = 0$ .</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-cyan-700 mb-2">BÀI TOÁN 11: Ném thẳng đứng xuống </h4>
+                            <p class="text-sm text-gray-600">Nhanh dần đều với $a=g$, cùng hướng $v_0$. PT: $s = \frac{1}{2}gt^2 + v_0 t$ .</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-orange-500 relative">
+                    <div class="flex items-center gap-4 mb-4">
+                        <h3 class="text-2xl font-black text-orange-900">§4 & §5. CHUYỂN ĐỘNG TRÒN </h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-gray-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-orange-700 mb-2">BÀI TOÁN 12: v, a trong Tròn đều </h4>
+                            <p class="text-sm text-gray-600">Áp dụng $\omega = 2\pi n = \frac{v}{R}$ và $a = \frac{v^2}{R}$. Cần chú ý bánh xe lăn không trượt: cung quay = quãng đường .</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-xl border">
+                            <h4 class="font-bold text-orange-700 mb-2">BÀI TOÁN 13: a, v, n, s trong Tròn biến đổi </h4>
+                            <p class="text-sm text-gray-600">Gia tốc toàn phần $a = \sqrt{a_t^2 + a_n^2}$. Tính gia tốc góc $\alpha = \frac{\Delta\omega}{\Delta t}$. Số vòng $n = \frac{s - s_0}{2\pi R} = \frac{\varphi - \varphi_0}{2\pi}$ .</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="exam-area" class="tab-content">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden max-w-5xl mx-auto">
+                <div class="bg-gradient-to-r from-blue-900 to-indigo-900 p-5 flex flex-col md:flex-row justify-between items-center border-b border-blue-100 gap-4 text-white">
+                    <h2 class="font-black text-xl tracking-tight">KỲ THI ĐÁNH GIÁ NĂNG LỰC | MÃ ĐỀ: <span id="exam-id" class="text-yellow-300 font-mono text-2xl ml-2"></span></h2>
+                    <div id="exam-timer" class="font-mono text-xl font-bold text-blue-900 bg-white px-6 py-2 rounded-xl border-2 border-yellow-300 shadow-sm flex items-center">
+                        <i class="fas fa-stopwatch text-red-500 mr-2 animate-pulse"></i> 45:00
+                    </div>
+                </div>
+                
+                <div class="p-6 md:p-10 bg-slate-50" id="exam-content"></div>
+
+                <div class="p-6 bg-white border-t flex justify-between items-center">
+                    <p class="text-sm text-gray-500 italic"><i class="fas fa-info-circle mr-1"></i>Thứ tự câu hỏi và đáp án đã được xáo trộn bảo mật.</p>
+                    <button onclick="submitExam()" id="submit-btn" class="bg-green-600 text-white px-10 py-3.5 rounded-xl font-black hover:bg-green-700 transition shadow-lg text-lg"><i class="fas fa-paper-plane mr-2"></i> NỘP BÀI CHẤM ĐIỂM</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="result-area" class="tab-content">
+            <div class="bg-white p-10 rounded-3xl shadow-2xl border border-gray-100 max-w-4xl mx-auto text-center mb-8 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-green-500 to-purple-500"></div>
+                <h2 class="text-3xl font-black mb-2 text-gray-800">TỔNG ĐIỂM BÀI THI</h2>
+                <div class="text-6xl font-black text-blue-600 mb-8" id="final-score">0.0 <span class="text-2xl text-gray-400">/ 10.0</span></div>
+                
+                <div class="grid grid-cols-3 gap-4 mb-10 max-w-3xl mx-auto">
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                        <div class="text-xs md:text-sm text-blue-500 font-bold uppercase mb-1">P.I (Trắc nghiệm)</div>
+                        <div class="text-xl font-black text-blue-800" id="score-p1">0/3.0</div>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-xl border border-green-100">
+                        <div class="text-xs md:text-sm text-green-500 font-bold uppercase mb-1">P.II (Đúng/Sai)</div>
+                        <div class="text-xl font-black text-green-800" id="score-p2">0/4.0</div>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-100">
+                        <div class="text-xs md:text-sm text-purple-500 font-bold uppercase mb-1">P.III (Trả lời ngắn)</div>
+                        <div class="text-xl font-black text-purple-800" id="score-p3">0/3.0</div>
+                    </div>
+                </div>
+                <button onclick="showReviewPanel()" class="bg-yellow-500 text-white px-10 py-4 rounded-xl font-bold hover:bg-yellow-600 transition shadow-lg w-full md:w-auto text-lg"><i class="fas fa-search mr-2"></i>Xem Bảng Chữa Bài Chi Tiết</button>
+            </div>
+
+            <div id="review-panel" class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-gray-200 max-w-5xl mx-auto hidden">
+                <h2 class="text-2xl font-black mb-8 text-gray-800 border-b pb-4"><i class="fas fa-chalkboard-teacher text-blue-600 mr-2"></i>Bảng Chữa Bài Chi Tiết</h2>
+                <div id="review-content" class="space-y-10"></div>
+                <div class="mt-10 text-center border-t pt-8 flex justify-center gap-4 flex-wrap">
+                    <button onclick="showTab('home')" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-xl font-bold hover:bg-gray-300 transition">Về Trang Chủ</button>
+                    <button onclick="startExam()" class="bg-blue-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg"><i class="fas fa-random mr-2"></i>Sinh Mã Đề Mới (Thi Lại)</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        document.querySelectorAll('a[href^="#sec-"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // NGÂN HÀNG CÂU HỎI (Giữ nguyên gốc)
+        const bankPart1 = [
+            { id: "P1_01", q: "Đại lượng nào sau đây cho biết mức độ nhanh hay chậm của chuyển động?", a: ["Quãng đường", "Thời gian", "Tốc độ", "Khối lượng"], correct: 2, solution: "Tốc độ là đại lượng đặc trưng cho mức độ nhanh hay chậm." },
+            { id: "P1_02", q: "Lực tác dụng lên vật có thể gây ra kết quả nào?", a: ["Chỉ làm vật biến dạng", "Chỉ thay đổi tốc độ", "Biến dạng hoặc thay đổi trạng thái chuyển động", "Không thay đổi gì"], correct: 2, solution: "Lực có thể làm biến dạng hoặc thay đổi trạng thái chuyển động." },
+            { id: "P1_03", q: "Công thức tính áp suất chất rắn là:", a: ["$p = F/S$", "$p = d \\cdot h$", "$p = P \\cdot V$", "$p = m/V$"], correct: 0, solution: "Áp suất $p = F/S$." },
+            { id: "P1_04", q: "15 km/h đổi ra m/s xấp xỉ là:", a: ["$3.5 m/s$", "$4.17 m/s$", "$5 m/s$", "$1.5 m/s$"], correct: 1, solution: "Lấy $15 : 3.6 \\approx 4.167 m/s$." },
+            { id: "P1_05", q: "Trọng lượng của vật $5 kg$ trên Trái Đất là:", a: ["$5 N$", "$50 N$", "$0.5 N$", "$500 N$"], correct: 1, solution: "$P = 10m = 50N$." },
+            { id: "P1_06", q: "Vật đặc chìm xuống chất lỏng khi:", a: ["$d_v > d_l$", "$d_v < d_l$", "$d_v = d_l$", "Thể tích vật lớn"], correct: 0, solution: "Chìm khi $P > F_A \\Leftrightarrow d_v > d_l$." },
+            { id: "P1_07", q: "Năng lượng vật có được do chuyển động là:", a: ["Thế năng", "Động năng", "Nhiệt năng", "Điện năng"], correct: 1, solution: "Động năng là năng lượng do chuyển động." },
+            { id: "P1_08", q: "Hai lực cân bằng là hai lực:", a: ["Cùng phương, cùng chiều", "Cùng phương, ngược chiều, cùng độ lớn, tác dụng vào cùng 1 vật", "Vuông góc nhau", "Tác dụng vào 2 vật khác nhau"], correct: 1, solution: "Đặc điểm của hai lực cân bằng." },
+            { id: "P1_09", q: "Công cơ học khi kéo vật bằng lực $20N$ đi $5m$ là:", a: ["$100 J$", "$4 J$", "$15 J$", "$25 J$"], correct: 0, solution: "$A = F \\cdot s = 20 \\cdot 5 = 100J$." },
+            { id: "P1_10", q: "Đồ thị quãng đường - thời gian của chuyển động đều là:", a: ["Đường cong", "Đường thẳng nằm nghiêng", "Đường thẳng đứng", "Parabol"], correct: 1, solution: "Quãng đường tỉ lệ thuận với thời gian." },
+            { id: "P1_11", q: "Áp suất chất lỏng đứng yên phụ thuộc vào:", a: ["Khối lượng", "Thể tích bình", "Độ sâu và trọng lượng riêng", "Hình dạng bình"], correct: 2, solution: "$p = d \\cdot h$." },
+            { id: "P1_12", q: "Xe phanh gấp, người lao về phía trước là do:", a: ["Lực kéo", "Quán tính", "Lực đẩy", "Ma sát"], correct: 1, solution: "Do quán tính, vật giữ nguyên vận tốc cũ." },
+            { id: "P1_13", q: "Lực đẩy Ác-si-mét có hướng:", a: ["Từ trên xuống", "Từ dưới lên", "Ngang", "Mọi hướng"], correct: 1, solution: "Hướng thẳng đứng từ dưới lên." },
+            { id: "P1_14", q: "Sắt ($7800kg/m^3$) thả vào nước ($1000kg/m^3$) sẽ:", a: ["Nổi", "Chìm", "Lơ lửng", "Tan"], correct: 1, solution: "$d_{sắt} > d_{nước}$ nên chìm." },
+            { id: "P1_15", q: "Máy cơ đơn giản KHÔNG cho lợi về:", a: ["Lực", "Đường đi", "Công", "Thời gian"], correct: 2, solution: "Định luật về công." },
+            { id: "P1_16", q: "Thế năng trọng trường phụ thuộc vào:", a: ["Khối lượng và vận tốc", "Độ cao và khối lượng", "Độ biến dạng", "Chỉ độ cao"], correct: 1, solution: "Phụ thuộc vào mốc tính thế năng (độ cao) và khối lượng vật." },
+            { id: "P1_17", q: "Đơn vị của áp suất là:", a: ["N/m", "N/m2 (Pa)", "Joule", "Watt"], correct: 1, solution: "Áp suất tính bằng N/m2 hay Pascal (Pa)." },
+            { id: "P1_18", q: "Lực ma sát nghỉ có tác dụng:", a: ["Làm xe dừng lại", "Làm mòn lốp", "Giữ vật đứng yên khi có lực tác dụng", "Làm nóng máy"], correct: 2, solution: "Bản chất của ma sát nghỉ là giữ vật đứng yên." }
+        ];
+
+        const bankPart2 = [
+            { id: "P2_01", context: "Người kéo vật 20 kg trượt đều trên mặt sàn bằng lực kéo 50 N. ($g = 10$).",
+              statements: [ { text: "Trọng lượng vật là 200 N.", isTrue: true, reason: "$P = 10m = 200 N$." }, { text: "Ma sát trượt là 200 N.", isTrue: false, reason: "Trượt ĐỀU nên $F_{ms} = F_{kéo} = 50 N$." }, { text: "Công kéo đi 4m là 200 J.", isTrue: true, reason: "$A = 50 \\cdot 4 = 200 J$." }, { text: "Trọng lực có thực hiện công.", isTrue: false, reason: "Trọng lực vuông góc hướng dịch chuyển nên công bằng 0." } ] },
+            { id: "P2_02", context: "Xe A tốc độ 40 km/h từ O đi đến M. Xe B đi từ M về O tốc độ 10 km/h. OM = 100 km.",
+              statements: [ { text: "Hai xe ngược chiều.", isTrue: true, reason: "O đến M và M về O." }, { text: "Sau 1h tổng đường đi là 50 km.", isTrue: true, reason: "$40+10 = 50km$." }, { text: "Hai xe gặp nhau sau 2.5 giờ.", isTrue: false, reason: "$t = 100/(40+10) = 2$ giờ." }, { text: "Vị trí gặp cách O 80 km.", isTrue: true, reason: "$s_A = 40 \\cdot 2 = 80 km$." } ] },
+            { id: "P2_03", context: "Thả cầu đặc 0.5 kg, thể tích $100 cm^3$ vào nước ($d=10000 N/m^3$).",
+              statements: [ { text: "Trọng lượng cầu là 5 N.", isTrue: true, reason: "$P = 10 \\cdot 0.5 = 5 N$." }, { text: "Lực đẩy Archimedes tối đa 1 N.", isTrue: true, reason: "$10000 \\cdot 0.0001 = 1 N$." }, { text: "Quả cầu sẽ nổi.", isTrue: false, reason: "$P (5N) > F_A (1N)$ nên chìm." }, { text: "Trọng lượng riêng của cầu là $50000 N/m^3$.", isTrue: true, reason: "$d = P/V = 5 / 0.0001$." } ] },
+            { id: "P2_04", context: "Dùng palăng (1 ròng rọc động) nâng vật 400 N lên cao 5 m.",
+              statements: [ { text: "Lực kéo là 200 N.", isTrue: true, reason: "$F = P/2 = 200 N$." }, { text: "Kéo dây 5 m.", isTrue: false, reason: "$s = 2h = 10 m$." }, { text: "Công thực hiện là 2000 J.", isTrue: true, reason: "$A = P \\cdot h = 400 \\cdot 5 = 2000 J$." }, { text: "Palăng giúp giảm công một nửa.", isTrue: false, reason: "Không máy cơ nào cho lợi về công." } ] },
+            { id: "P2_05", context: "Bình thông nhau chứa nước. Đổ lớp dầu cao 20 cm vào nhánh trái. ($d_n=10000, d_d=8000$).",
+              statements: [ { text: "Mực nước nhánh phải cao hơn nhánh trái.", isTrue: true, reason: "Dầu đè xuống đẩy nước sang phải." }, { text: "Áp suất tại đáy lớp dầu là 1600 Pa.", isTrue: true, reason: "$p = 8000 \\cdot 0.2 = 1600 Pa$." }, { text: "Chênh lệch mực nước 2 nhánh là 16 cm.", isTrue: true, reason: "$8000 \\cdot 20 = 10000 \\cdot h_n \Rightarrow h_n=16cm$." }, { text: "Mặt thoáng dầu thấp hơn mặt nước.", isTrue: false, reason: "Dầu cao 20, nước chênh 16 nên dầu cao hơn 4cm." } ] }
+        ];
+
+        const bankPart3 = [
+            { id: "P3_01", q: "Ô tô đi 120 km trong 2.5 giờ. Tốc độ (km/h)?", ans: 48, solution: "$v = 120 / 2.5 = 48$" },
+            { id: "P3_02", q: "Lực đẩy 150 N di chuyển 8 mét. Công (J)?", ans: 1200, solution: "$A = 150 \\cdot 8 = 1200$" },
+            { id: "P3_03", q: "Công 30000 J trong 5 giây. Công suất (W)?", ans: 6000, solution: "$\\mathcal{P} = 30000 / 5 = 6000$" },
+            { id: "P3_04", q: "Tàu lặn sâu 50 m. $d_{nước} = 10300 N/m^3$. Áp suất (Pa)?", ans: 515000, solution: "$p = 10300 \\cdot 50 = 515000$" },
+            { id: "P3_05", q: "Gỗ $0.002 m^3$ chìm hoàn toàn trong nước. $F_A$ (N)?", ans: 20, solution: "$F_A = 10000 \\cdot 0.002 = 20$" },
+            { id: "P3_06", q: "Xe A 30 km/h, xe B 20 km/h ngược chiều. Cách 100 km. Sau bao lâu gặp nhau (giờ)?", ans: 2, solution: "$t = 100 / (30+20) = 2$" },
+            { id: "P3_07", q: "Vật 5 kg rơi từ 4 m. Thế năng ban đầu (J)?", ans: 200, solution: "$W_t = P \\cdot h = 50 \\cdot 4 = 200$" },
+            { id: "P3_08", q: "Mặt phẳng nghiêng dài 4 m cao 1 m. Lực kéo 100 N. Trọng lượng (N)?", ans: 400, solution: "$100 \\cdot 4 = P \\cdot 1 \Rightarrow P = 400$" },
+            { id: "P3_09", q: "Đi nửa đường đầu 12 km/h, nửa sau 20 km/h. Tốc độ trung bình (km/h)?", ans: 15, solution: "$v_{tb} = \\frac{2 \\cdot 12 \\cdot 20}{12+20} = 15$" },
+            { id: "P3_10", q: "Pittông lớn gấp 50 lần pittông nhỏ. F nhỏ = 20 N. F lớn (N)?", ans: 1000, solution: "$F_{lớn} = 20 \\cdot 50 = 1000$" },
+            { id: "P3_11", q: "Một khối đồng đặc có khối lượng 8.9 kg. Biết khối lượng riêng của đồng là 8900 kg/m3. Thể tích của nó là bao nhiêu m3?", ans: 0.001, solution: "$V = m / D = 8.9 / 8900 = 0.001$" },
+            { id: "P3_12", q: "Lò xo treo vật 100g dãn 2cm. Nếu treo vật 300g thì dãn bao nhiêu cm?", ans: 6, solution: "Độ dãn tỉ lệ thuận với khối lượng." }
+        ];
+
+        let timerInterval;
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            window.scrollTo(0,0);
+            if(window.MathJax) MathJax.typesetPromise();
+        }
+
+        function shuffle(array) {
+            let cloned = JSON.parse(JSON.stringify(array));
+            for (let i = cloned.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cloned[i], cloned[j]] = [cloned[j], cloned[i]];
+            }
+            return cloned;
+        }
+
+        let currentExam = { p1: [], p2: [], p3: [] };
+
+        function startTimer(duration) {
+            clearInterval(timerInterval);
+            let timer = duration, minutes, seconds;
+            let display = document.getElementById('exam-timer');
+            timerInterval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.innerHTML = `<i class="fas fa-stopwatch text-red-500 mr-2 animate-pulse"></i> ${minutes}:${seconds}`;
+                if (--timer < 0) {
+                    clearInterval(timerInterval);
+                    alert("Đã hết thời gian làm bài! Hệ thống tự động nộp bài.");
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function startExam() {
+            let examCode = Math.floor(Math.random() * 899) + 100;
+            document.getElementById('exam-id').innerText = examCode;
+            document.getElementById('review-panel').classList.add('hidden'); 
+            
+            currentExam.p1 = shuffle(bankPart1).slice(0, 12);
+            currentExam.p2 = shuffle(bankPart2).slice(0, 4);
+            currentExam.p3 = shuffle(bankPart3).slice(0, 6);
+
+            currentExam.p1.forEach(q => {
+                let optionsArray = q.a.map((text, idx) => ({ text, isCorrect: idx === q.correct }));
+                q.displayOptions = shuffle(optionsArray);
+                q.userAnswer = null;
+            });
+
+            currentExam.p2.forEach(q => q.userAnswers = [null, null, null, null]);
+            currentExam.p3.forEach(q => q.userAnswer = "");
+
+            renderExamUI();
+            showTab('exam-area');
+            startTimer(45 * 60); // 45 phút đếm ngược
+        }
+
+        function renderExamUI() {
+            let html = ``;
+            
+            html += `<h3 class="font-bold text-xl text-blue-800 border-b-2 border-blue-200 pb-2 mb-6 uppercase">Phần I. Câu trắc nghiệm (12 câu x 0.25đ = 3.0đ)</h3>`;
+            currentExam.p1.forEach((q, index) => {
+                html += `<div class="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-200"><p class="font-bold text-lg mb-4 text-gray-800">Câu ${index + 1}: ${q.q}</p><div class="grid md:grid-cols-2 gap-3">`;
+                q.displayOptions.forEach((opt, oIdx) => {
+                    const letter = String.fromCharCode(65 + oIdx);
+                    html += `<div class="mcq-option border border-gray-300 rounded-xl p-4 cursor-pointer transition text-gray-700 font-medium" onclick="selectP1('${q.id}', ${oIdx}, this)" data-qid="${q.id}">
+                                <span class="font-bold mr-3 text-blue-600 bg-blue-50 px-2 py-1 rounded">${letter}</span> ${opt.text}
+                             </div>`;
+                });
+                html += `</div></div>`;
+            });
+
+            html += `<h3 class="font-bold text-xl text-green-800 border-b-2 border-green-200 pb-2 mb-6 mt-12 uppercase">Phần II. Trắc nghiệm Đúng/Sai (4 câu x 1.0đ = 4.0đ)</h3>`;
+            currentExam.p2.forEach((q, index) => {
+                html += `<div class="mb-8 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+                    <p class="font-bold mb-4 text-lg text-gray-800">Câu ${index + 1}: ${q.context}</p><div class="space-y-3 mt-4">`;
+                q.statements.forEach((stmt, sIdx) => {
+                    const letter = String.fromCharCode(97 + sIdx);
+                    html += `<div class="flex flex-col md:flex-row justify-between md:items-center bg-gray-50 p-4 rounded-xl border border-gray-200 gap-4">
+                            <div class="w-full md:w-3/4"><span class="font-bold text-green-700 mr-2">${letter})</span> ${stmt.text}</div>
+                            <div class="w-full md:w-1/4 flex gap-2 justify-end">
+                                <button onclick="selectP2('${q.id}', ${sIdx}, true, this)" class="tf-btn px-6 py-2 border rounded-xl font-bold transition">Đúng</button>
+                                <button onclick="selectP2('${q.id}', ${sIdx}, false, this)" class="tf-btn px-6 py-2 border rounded-xl font-bold transition">Sai</button>
+                            </div></div>`;
+                });
+                html += `</div></div>`;
+            });
+
+            html += `<h3 class="font-bold text-xl text-purple-800 border-b-2 border-purple-200 pb-2 mb-6 mt-12 uppercase">Phần III. Trả lời ngắn (6 câu x 0.5đ = 3.0đ)</h3>`;
+            html += `<div class="grid md:grid-cols-2 gap-6">`
+            currentExam.p3.forEach((q, index) => {
+                html += `<div class="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm">
+                    <p class="font-bold mb-4 text-gray-800">Câu ${index + 1}: ${q.q}</p>
+                    <div class="flex items-center gap-4 mt-4">
+                        <span class="font-bold text-gray-500 uppercase text-xs">Điền số:</span>
+                        <input type="number" step="any" oninput="inputP3('${q.id}', this.value)" class="border-2 border-purple-300 rounded-xl px-4 py-2 w-full focus:border-purple-600 font-bold text-lg text-center shadow-inner" placeholder="...">
+                    </div></div>`;
+            });
+            html += `</div>`;
+
+            document.getElementById('exam-content').innerHTML = html;
+            if(window.MathJax) MathJax.typesetPromise();
+        }
+
+        function selectP1(qId, optionIdx, element) {
+            let q = currentExam.p1.find(x => x.id === qId);
+            q.userAnswer = optionIdx;
+            document.querySelectorAll(`.mcq-option[data-qid="${qId}"]`).forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function selectP2(qId, stmtIdx, isTrue, element) {
+            let q = currentExam.p2.find(x => x.id === qId);
+            q.userAnswers[stmtIdx] = isTrue;
+            let parent = element.parentElement;
+            parent.querySelectorAll('.tf-btn').forEach(btn => btn.classList.remove('selected-true', 'selected-false'));
+            if (isTrue) element.classList.add('selected-true');
+            else element.classList.add('selected-false');
+        }
+
+        function inputP3(qId, value) {
+            currentExam.p3.find(x => x.id === qId).userAnswer = value.trim();
+        }
+
+        function submitExam() {
+            clearInterval(timerInterval); // Dừng đếm ngược khi nộp bài
+            let scoreP1 = 0, scoreP2 = 0, scoreP3 = 0;
+
+            currentExam.p1.forEach(q => { if(q.userAnswer !== null && q.displayOptions[q.userAnswer].isCorrect) scoreP1 += 0.25; });
+            
+            currentExam.p2.forEach(q => {
+                let correctCount = 0;
+                q.statements.forEach((stmt, idx) => { if(q.userAnswers[idx] === stmt.isTrue) correctCount++; });
+                if(correctCount === 1) scoreP2 += 0.1; else if(correctCount === 2) scoreP2 += 0.25; else if(correctCount === 3) scoreP2 += 0.5; else if(correctCount === 4) scoreP2 += 1.0;
+            });
+
+            currentExam.p3.forEach(q => { if(q.userAnswer !== "" && parseFloat(q.userAnswer) === q.ans) scoreP3 += 0.5; });
+
+            let total = scoreP1 + scoreP2 + scoreP3;
+
+            document.getElementById('score-p1').innerText = scoreP1.toFixed(2) + " / 3.0";
+            document.getElementById('score-p2').innerText = scoreP2.toFixed(2) + " / 4.0";
+            document.getElementById('score-p3').innerText = scoreP3.toFixed(2) + " / 3.0";
+            document.getElementById('final-score').innerText = total.toFixed(2);
+
+            buildReviewPanel();
+            showTab('result-area');
+            window.scrollTo(0,0);
+        }
+
+        function showReviewPanel() {
+            document.getElementById('review-panel').classList.remove('hidden');
+            document.getElementById('review-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function buildReviewPanel() {
+            let html = ``;
+            
+            html += `<h3 class="font-bold text-lg text-blue-800 mb-4">PHẦN I. TRẮC NGHIỆM</h3>`;
+            currentExam.p1.forEach((q, idx) => {
+                html += `<div class="mb-8 border-b border-gray-200 pb-6"><p class="font-bold mb-3">Câu ${idx + 1}: ${q.q}</p><div class="grid md:grid-cols-2 gap-2">`;
+                q.displayOptions.forEach((opt, oIdx) => {
+                    let styling = "border border-gray-200 bg-gray-50 text-gray-500";
+                    if(opt.isCorrect) styling = "review-correct"; 
+                    else if (q.userAnswer === oIdx && !opt.isCorrect) styling = "review-wrong"; 
+                    html += `<div class="p-3 rounded-lg ${styling}">${String.fromCharCode(65 + oIdx)}. ${opt.text}</div>`;
+                });
+                html += `</div><div class="solution-box"><span class="font-bold text-green-700"><i class="fas fa-magic mr-1"></i> Lời giải:</span> ${q.solution}</div></div>`;
+            });
+
+            html += `<h3 class="font-bold text-lg text-green-800 mb-4 mt-8">PHẦN II. ĐÚNG/SAI</h3>`;
+            currentExam.p2.forEach((q, idx) => {
+                html += `<div class="mb-8 border-b border-gray-200 pb-6"><p class="font-bold mb-3 text-lg">Câu ${idx + 1}: ${q.context}</p><div class="space-y-4">`;
+                q.statements.forEach((stmt, sIdx) => {
+                    let userAnsStr = q.userAnswers[sIdx] === null ? "Chưa chọn" : (q.userAnswers[sIdx] ? "Đúng" : "Sai");
+                    let correctAnsStr = stmt.isTrue ? "Đúng" : "Sai";
+                    let isMatch = q.userAnswers[sIdx] === stmt.isTrue;
+                    let icon = isMatch ? `<i class="fas fa-check-circle text-green-500 text-lg"></i>` : `<i class="fas fa-times-circle text-red-500 text-lg"></i>`;
+
+                    html += `<div class="bg-gray-50 p-4 rounded-lg border ${isMatch ? 'border-green-300' : 'border-red-300'}">
+                        <p class="font-bold mb-2">${String.fromCharCode(97 + sIdx)}) ${stmt.text}</p>
+                        <div class="flex items-center gap-4 text-sm mb-3">
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Bạn chọn: <strong>${userAnsStr}</strong></span> ${icon}
+                            <span class="bg-white px-3 py-1 rounded shadow-sm">Đ/A Chuẩn: <strong class="text-blue-600">${correctAnsStr}</strong></span>
+                        </div>
+                        <div class="text-sm bg-white p-3 rounded border border-gray-200"><span class="font-bold text-green-700">Giải thích:</span> ${stmt.reason}</div>
+                    </div>`;
+                });
+                html += `</div></div>`;
+            });
+
+            html += `<h3 class="font-bold text-lg text-purple-800 mb-4 mt-8">PHẦN III. TRẢ LỜI NGẮN</h3>`;
+            currentExam.p3.forEach((q, idx) => {
+                let uAns = q.userAnswer === "" ? "Chưa điền" : parseFloat(q.userAnswer);
+                let textStyle = (uAns === q.ans) ? "text-green-600" : "text-red-600";
+                html += `<div class="mb-8 border-b border-gray-200 pb-6">
+                    <p class="font-bold mb-3">Câu ${idx + 1}: ${q.q}</p>
+                    <div class="flex flex-col sm:flex-row gap-2 sm:gap-6 mb-3">
+                        <div class="bg-gray-100 px-4 py-2 rounded-lg">Bạn điền: <strong class="${textStyle} text-lg">${uAns}</strong></div>
+                        <div class="bg-blue-50 px-4 py-2 rounded-lg text-blue-800">Đáp án chuẩn: <strong class="text-lg">${q.ans}</strong></div>
+                    </div>
+                    <div class="solution-box"><span class="font-bold text-green-700">Cách giải:</span> ${q.solution}</div>
+                </div>`;
+            });
+
+            document.getElementById('review-content').innerHTML = html;
+            if(window.MathJax) MathJax.typesetPromise();
+        }
+    </script>
+</body>
+</html>
