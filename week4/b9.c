@@ -1,26 +1,20 @@
+#define pi 3.14159265358979323846
 #include <stdio.h>
-#define PI 3.141592653589793
+#include <math.h>
 
 int main() {
     double R;
-    printf("Nhap ban kinh R: ");
     scanf("%lf", &R);
 
-    // Duong tron
-    double dienTichTron = PI * R * R;
-    double chuViTron = 2 * PI * R;
+    double chu_vi = 2 * pi * R;
+    double dien_tich_tron = pi * R * R;
+    double dien_tich_cau = 4 * pi * R * R;
+    double the_tich_cau = (4.0 / 3.0) * pi * R * R * R;
 
-    // Hinh cau
-    double dienTichCau = 4 * PI * R * R;
-    double theTichCau = (4.0 / 3.0) * PI * R * R * R;
-
-    printf("\nDuong tron:\n");
-    printf("Dien tich = %.2f\n", dienTichTron);
-    printf("Chu vi = %.2f\n", chuViTron);
-
-    printf("\nHinh cau:\n");
-    printf("Dien tich = %.2f\n", dienTichCau);
-    printf("The tich = %.2f\n", theTichCau);
+    printf("%.2f\n", chu_vi);
+    printf("%.2f\n", dien_tich_tron);
+    printf("%.2f\n", dien_tich_cau);
+    printf("%.2f\n", the_tich_cau);
 
     return 0;
 }
