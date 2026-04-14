@@ -1,12 +1,16 @@
-# 56 Tech - Online Judge Platform -56
-> ### A modern online programming platform with automated code evaluation system
+# C Intro - HomeWork Platform - IT3220
+
+> ### VKT ITE6_2025
+
 ---
+
 > [!IMPORTANT]
 >
 > This project was created for educational and learning purposes
-> 
+>
 > **Major Update (2024/11):**
-> - Integrated Judge0 API for automated code evaluation
+>
+> - IDoc Week5
 > - Support for 5 programming languages: C, C++, Java, Python, JavaScript
 > - Problem management system for teachers
 > - Real-time submission tracking and detailed test results
@@ -16,8 +20,7 @@
 
 ## Introduction
 
-**56 Tech** is an Online Judge platform designed to help students practice programming and enable teachers to manage coding assignments efficiently. The system integrates with Judge0 API to automatically evaluate code submissions across multiple programming languages.
-
+**C Intro Tech** is a project to store code during the process of learning C Introduction at Hanoi University of Science and Technology, Semester 20251.
 
 > [!WARNING]
 >
@@ -30,11 +33,13 @@
 ## Contact & Support
 
 ### Support
+
 - GitHub Issues: [Report bugs or request features](https://github.com/Oriall/56-Tech/issues)
-- Email: support@56tech.com
-- Documentation: [Wiki](https://github.com/yourusername/56-Tech/wiki)
+- Email: moraxzongli28@gmail.com
+- Documentation: Folder doc
 
 ### Community
+
 - Discord Server: [Join our community](https://discord.gg/56tech)
 - GitHub Discussions: [Ask questions and share ideas](https://github.com/oriall/56-Tech/discussions)
 
@@ -48,7 +53,7 @@
 
 **Star this repository if you find it helpful!**
 
-Made with dedication by 56 Tech Team
+Made with dedication by Oriall
 
 [Website](https://56tech.com) • [GitHub](https://github.com/Oriall) • [Discord](https://discord.gg/56tech)
 
