@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+//bai 13
 // Ham doi so nguyen thanh chu
 void docSoNhoHon1000(long long n) {
     const char *donvi[] = {"", "mot", "hai", "ba", "bon", "nam", "sau", "bay", "tam", "chin"};
