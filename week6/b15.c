@@ -1,23 +1,24 @@
 #include <stdio.h>
 
 int main() {
-    int m3;
-    scanf("%d", &m3);
+    int loai, dem, ngayNghi;
+    scanf("%d", &loai);
+    scanf("%d", &dem);
+    scanf("%d", &ngayNghi);
 
-    double tien = 0;
+    double donGia;
+    switch (loai) {
+        case 1: donGia = 500000;  break;
+        case 2: donGia = 900000;  break;
+        case 3: donGia = 1500000; break;
+    }
 
-    if (m3 <= 10)
-        tien = m3 * 5973;
-    else if (m3 <= 20)
-        tien = 10 * 5973 + (m3 - 10) * 7052;
-    else if (m3 <= 30)
-        tien = 10 * 5973 + 10 * 7052 + (m3 - 20) * 8669;
-    else
-        tien = 10 * 5973 + 10 * 7052 + 10 * 8669 + (m3 - 30) * 15929;
+    double tong = donGia * dem;
 
-    tien = tien * 1.05 + tien * 0.10; // VAT 5% + phí BVMT 10% tính trên giá gốc
+    if (ngayNghi) tong *= 1.20;
+    if (dem >= 5) tong *= 0.85;
 
-    printf("%d\n", (int)tien);
+    printf("%d\n", (int)tong);
 
     return 0;
 }
