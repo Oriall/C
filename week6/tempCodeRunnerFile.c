@@ -1,0 +1,2 @@
+
+            printf("loai kem"); break;
