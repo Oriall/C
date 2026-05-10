@@ -1,24 +1,28 @@
 #include <stdio.h>
 
 int main() {
-    char octal[50];
-    int i = 0;
-    scanf("%s", octal);
+    long long oct;
+    scanf("%lld", &oct);
 
-    while (octal[i]) {
-        switch (octal[i]) {
-            case '0': printf("000"); break;
-            case '1': printf("001"); break;
-            case '2': printf("010"); break;
-            case '3': printf("011"); break;
-            case '4': printf("100"); break;
-            case '5': printf("101"); break;
-            case '6': printf("110"); break;
-            case '7': printf("111"); break;
-            default: break;
+    long long bin = 0;
+    long long p = 1;
+
+    while (oct > 0) {
+        int digit = oct % 10;
+        int value = 0;
+        int base = 1;
+
+        while (digit > 0) {
+            value += (digit % 2) * base;
+            digit /= 2;
+            base *= 10;
         }
-        i++;
+
+        bin += value * p;
+        p *= 1000;
+        oct /= 10;
     }
-    printf("\n");
+
+    printf("%lld\n", bin);
     return 0;
 }
