@@ -33,23 +33,32 @@ int main() {
         case 2:  bth2();  break;
         case 3:  bth3();  break;
         case 4:  bth4();  break;
-        case 5:  bth5a(); break;
-        case 6:  bth5b(); break;
-        case 7:  bth6();  break;
-        case 8:  bth7();  break;
-        case 9:  bth8();  break;
-        case 10: bth9();  break;
-        case 11: bth10(); break;
-        case 12: bth11(); break;
-        case 13: bth12(); break;
-        case 14: bth13(); break;
-        case 15: bth14(); break;
-        case 16: bth15(); break;
-        case 17: bth16(); break;
-        case 18: bth17(); break;
-        case 19: bth18(); break;
-        case 20: bth19(); break;
-        case 21: bth20(); break;
+        case 5: {
+            int sub = 0;
+            printf("\n  5a. Vong for voi continue (bo qua i=5)");
+            printf("\n  5b. Loc ky tu: bo so, dung tai dau cham");
+            printf("\n  Chon (1=5a, 2=5b): ");
+            scanf("%d", &sub);
+            if (sub == 1) bth5a();
+            else if (sub == 2) bth5b();
+            else printf("Lua chon khong hop le!\n");
+            break;
+        }
+        case 6:  bth6();  break;
+        case 7:  bth7();  break;
+        case 8:  bth8();  break;
+        case 9:  bth9();  break;
+        case 10: bth10(); break;
+        case 11: bth11(); break;
+        case 12: bth12(); break;
+        case 13: bth13(); break;
+        case 14: bth14(); break;
+        case 15: bth15(); break;
+        case 16: bth16(); break;
+        case 17: bth17(); break;
+        case 18: bth18(); break;
+        case 19: bth19(); break;
+        case 20: bth20(); break;
         default:
             printf("Lua chon khong hop le!\n");
     }
@@ -63,23 +72,22 @@ int menu() {
     printf("\n 2.  Bai 2  - Nhan doi so cho den khi vuot 1000 (while)");
     printf("\n 3.  Bai 3  - Tinh tong 1 den 50 (do-while)");
     printf("\n 4.  Bai 4  - Demo pre/post increment trong do-while");
-    printf("\n 5.  Bai 5a - Vong for voi continue (bo qua i=5)");
-    printf("\n 6.  Bai 5b - Loc ky tu: bo so, dung tai dau cham (break/continue)");
-    printf("\n 7.  Bai 6  - Rut gon khoang trang lien tiep (while + EOF)");
-    printf("\n 8.  Bai 7  - Hien thi escape sequence ro rang (while + EOF)");
-    printf("\n 9.  Bai 8  - Tinh trung binh diem cho den khi nhap am (while + scanf)");
-    printf("\n10.  Bai 9  - Tinh tong chuoi cos(x) den do chinh xac 10^-n (do-while)");
-    printf("\n11.  Bai 10 - Kiem tra so doi xung (palindrome)");
-    printf("\n12.  Bai 11 - Chuyen so nguyen thap phan sang nhi phan");
-    printf("\n13.  Bai 12 - Chuyen so nhi phan sang thap phan");
-    printf("\n14.  Bai 13 - Chuyen so bat phan sang nhi phan");
-    printf("\n15.  Bai 14 - Tim so Fibonacci lon nhat nho hon N");
-    printf("\n16.  Bai 15 - Tinh tong chuoi e^x bang cong thuc Taylor");
-    printf("\n17.  Bai 16 - Chuyen so nhi phan sang bat phan");
-    printf("\n18.  Bai 17 - Tinh sinh(x) bang chuoi Taylor");
-    printf("\n19.  Bai 18 - Tinh cosh(x) bang chuoi Taylor");
-    printf("\n20.  Bai 19 - Tinh arctan(x) bang chuoi Taylor");
-    printf("\n21.  Bai 20 - Tinh sin(x) bang chuoi Taylor");
+    printf("\n 5.  Bai 5  - break/continue (chon 5a hoac 5b)");
+    printf("\n 6.  Bai 6  - Rut gon khoang trang lien tiep (while + EOF)");
+    printf("\n 7.  Bai 7  - Hien thi escape sequence ro rang (while + EOF)");
+    printf("\n 8.  Bai 8  - Tinh trung binh diem cho den khi nhap am (while + scanf)");
+    printf("\n 9.  Bai 9  - Tinh tong chuoi cos(x) den do chinh xac 10^-n (do-while)");
+    printf("\n10.  Bai 10 - Kiem tra so doi xung (palindrome)");
+    printf("\n11.  Bai 11 - Chuyen so nguyen thap phan sang nhi phan");
+    printf("\n12.  Bai 12 - Chuyen so nhi phan sang thap phan");
+    printf("\n13.  Bai 13 - Chuyen so bat phan sang nhi phan");
+    printf("\n14.  Bai 14 - Tim so Fibonacci lon nhat nho hon N");
+    printf("\n15.  Bai 15 - Tinh tong chuoi e^x bang cong thuc Taylor");
+    printf("\n16.  Bai 16 - Chuyen so nhi phan sang bat phan");
+    printf("\n17.  Bai 17 - Tinh sinh(x) bang chuoi Taylor");
+    printf("\n18.  Bai 18 - Tinh cosh(x) bang chuoi Taylor");
+    printf("\n19.  Bai 19 - Tinh arctan(x) bang chuoi Taylor");
+    printf("\n20.  Bai 20 - Tinh sin(x) bang chuoi Taylor");
     printf("\n-------------------------------------------------");
     printf("\nNhap tuy chon: ");
     scanf("%d", &tuy_chon);
@@ -374,24 +382,26 @@ void bth18() {
     printf("cosh(%.2f) = %.2lf\n", x, sum);
 }
 
-/* Bai 19: Tinh arctan(x) = x - x^3/3 + x^5/5 - ...
-           Dung khi |so hang| < 1e-10 */
+/* Bai 19: Tinh arctan(x) bang chuoi Taylor voi cong thuc truy hoi
+           term_moi = term_cu * (-x^2) * (2n-1) / (2n+1) */
+double my_arctan(double x) {
+    double term   = x;
+    double result = x;
+    double x2     = x * x;
+    int n = 1;
+    do {
+        term   *= -x2 * (2 * n - 1) / (2 * n + 1);
+        result += term;
+        n++;
+    } while (fabs(term) >= 1e-10);
+    return result;
+}
+
 void bth19() {
-    double x, S, term;
-    int n;
+    double x;
     printf("Nhap x: ");
     scanf("%lf", &x);
-    S    = x;
-    term = x;
-    n    = 1;
-    while (1) {
-        n++;
-        term = -term * x * x;
-        double next = term / (2 * n - 1);
-        if (fabs(next) < 1e-10) break;
-        S += next;
-    }
-    printf("arctan(%.2f) = %.10f\n", x, S);
+    printf("arctan(%g) = %.10f\n", x, my_arctan(x));
 }
 
 /* Bai 20: Tinh sin(x) = x - x^3/3! + x^5/5! - ...
