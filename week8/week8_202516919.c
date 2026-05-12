@@ -278,33 +278,27 @@ void bth12() {
     printf("%d\n", dec);
 }
 
-/* Bai 13: Chuyen so bat phan sang nhi phan
-           Moi chu so bat phan duoc chuyen sang 3 bit nhi phan bang cach chia 2 */
+/* Bai 13: Chuyen so bat phan sang nhi phan (moi chu so -> 3 bit) */
 void bth13() {
-    long long oct;
+    char octal[50];
+    int i = 0;
     printf("Nhap so bat phan: ");
-    scanf("%lld", &oct);
-
-    long long bin = 0;
-    long long p   = 1;
-
-    while (oct > 0) {
-        int digit = oct % 10;
-        int value = 0;
-        int base  = 1;
-
-        while (digit > 0) {
-            value += (digit % 2) * base;
-            digit /= 2;
-            base  *= 10;
+    scanf("%s", octal);
+    while (octal[i]) {
+        switch (octal[i]) {
+            case '0': printf("000"); break;
+            case '1': printf("001"); break;
+            case '2': printf("010"); break;
+            case '3': printf("011"); break;
+            case '4': printf("100"); break;
+            case '5': printf("101"); break;
+            case '6': printf("110"); break;
+            case '7': printf("111"); break;
+            default: break;
         }
-
-        bin += value * p;
-        p   *= 1000;
-        oct /= 10;
+        i++;
     }
-
-    printf("%lld\n", bin);
+    printf("\n");
 }
 
 /* Bai 14: Tim so Fibonacci lon nhat nho hon N */
