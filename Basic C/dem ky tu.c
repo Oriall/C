@@ -1,24 +1,31 @@
 #include <stdio.h>
 #include <string.h>
 
-int demTu(const char *s) {
+int demTu(const char *s)
+{
     int dem = 0;
     int trongTu = 0;
-    
-    for (int i = 0; s[i] != '\0'; i++) {
-        if (s[i] != ' ' && s[i] != '\t') {
-            if (!trongTu) {
+
+    for (int i = 0; s[i] != '\0'; i++)
+    {
+        if (s[i] != ' ' && s[i] != '\t')
+        {
+            if (!trongTu)
+            {
                 dem++;
                 trongTu = 1;
             }
-        } else {
+        }
+        else
+        {
             trongTu = 0;
         }
     }
     return dem;
 }
 
-int main() {
+int main()
+{
     int n;
     scanf("%d", &n);
     getchar();
@@ -26,7 +33,8 @@ int main() {
     int b[10002];
     int tongSoTu = 0;
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         char s[1026];
         fgets(s, sizeof(s), stdin);
         s[strcspn(s, "\r\n")] = '\0';
@@ -36,7 +44,8 @@ int main() {
     }
 
     printf("%d\n", tongSoTu);
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         printf("%d\n", b[i]);
     }
 
